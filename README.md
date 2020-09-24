@@ -29,5 +29,5 @@ Receive with the `EventProcessorClient`
 mvn compile exec:java -Dexec.mainClass="eventhubs.latency.bare.EventProcessorApplication"
 ```
 
-#Observation
+## Observation
 EventProcessorClient adds about 30% overhead.
