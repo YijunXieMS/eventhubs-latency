@@ -12,6 +12,7 @@ import reactor.core.scheduler.Schedulers;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 public class Producer {
@@ -20,7 +21,7 @@ public class Producer {
                 .connectionString(Configuration.getConfiguration("eventhub.connection_string"))
                 .buildAsyncProducerClient();
         CreateBatchOptions options = new CreateBatchOptions().setPartitionId(Configuration.getConfiguration("eventhub.partition"));
-        Flux.range(0, 1000)
+        Flux.range(0, Integer.parseInt(Configuration.getConfiguration("eventhub.test_number_of_events")))
                 //.delayElements(Duration.ofMillis(500))
                 .flatMap(i -> producer.createBatch(options))
                 .map(eventDataBatch -> {
@@ -28,7 +29,8 @@ public class Producer {
                     buffer.putLong(System.currentTimeMillis());
                     eventDataBatch.tryAdd(new EventData(buffer.array()));
                     return eventDataBatch;
-                }).flatMap(batch -> {return producer.send(batch);}).subscribe();
+                }).flatMap(producer::send).subscribe();
+        producer.close();
     }
 
     public void sendToPartitionSync() {
@@ -36,7 +38,7 @@ public class Producer {
                 .connectionString(Configuration.getConfiguration("eventhub.connection_string"))
                 .buildProducerClient();
         CreateBatchOptions options = new CreateBatchOptions().setPartitionId(Configuration.getConfiguration("eventhub.partition"));
-        IntStream.range(0, 1000).forEach(
+        IntStream.range(0, Integer.parseInt(Configuration.getConfiguration("eventhub.test_number_of_events"))).forEach(
                 x -> {
                     EventDataBatch eventDataBatch = producer.createBatch(options);
                     ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
@@ -45,5 +47,22 @@ public class Producer {
                     producer.send(eventDataBatch);
                 }
         );
+        producer.close();
+    }
+
+    public void sendToPartitionSyncAndCollectData() throws InterruptedException {
+        long startSend = System.currentTimeMillis();
+        TimeUnit.SECONDS.sleep(5);
+        this.sendToPartitionSync();
+        long endSend = System.currentTimeMillis();
+        long totalSendTime = endSend - startSend;
+        TimeUnit.SECONDS.sleep(5);
+        System.out.println("Total send time  in milliseconds: " + totalSendTime);
+        System.out.println("Number of events: " + Tracker.getValues().size());
+        long totalLatency = Tracker.getValues().stream().reduce(0L, Long::sum);
+        System.out.println("Total latency in milliseconds: " + totalLatency);
+        System.out.println("Average latency in milliseconds: " + totalLatency / Tracker.getValues().size());
+        System.out.println("Total send time - total latency  in milliseconds: " + (totalSendTime - totalLatency));
+        System.out.println(Tracker.getValues());
     }
 }
