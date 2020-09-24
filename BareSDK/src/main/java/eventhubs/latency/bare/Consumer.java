@@ -5,6 +5,8 @@ import com.azure.messaging.eventhubs.EventHubConsumerAsyncClient;
 import com.azure.messaging.eventhubs.models.EventPosition;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Consumer {
     public void receiveFromPartition() {

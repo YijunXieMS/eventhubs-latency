@@ -7,7 +7,7 @@ public class Application {
         Consumer consumer = new Consumer();
         consumer.receiveFromPartition();
         Producer producer = new Producer();
-        producer.sendToPartition();
+        producer.sendToPartitionSync();
         System.in.read();
     }
 }
