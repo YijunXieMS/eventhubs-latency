@@ -11,7 +11,7 @@ public class EventProcessor {
             .connectionString(Configuration.getConfiguration("eventhub.connection_string"))
             .consumerGroup(Configuration.getConfiguration("eventhub.consumer_group"))
             .checkpointStore(new SampleCheckpointStore())
-            .loadBalancingUpdateInterval(Duration.ofSeconds(200))
+            .loadBalancingUpdateInterval(Duration.ofSeconds(10))
             .processEvent(eventContext -> {
                 byte[] data = eventContext.getEventData().getBody();
                 long eventTimeMillis = ByteBuffer.wrap(data).getLong();

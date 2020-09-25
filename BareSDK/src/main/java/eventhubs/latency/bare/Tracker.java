@@ -15,4 +15,12 @@ public class Tracker {
     public static List<Long> getValues() {
         return values;
     }
+
+    public static void print() {
+        System.out.println("Number of events: " + Tracker.getValues().size());
+        long totalLatency = Tracker.getValues().stream().reduce(0L, Long::sum);
+        System.out.println("Total latency in milliseconds: " + totalLatency);
+        System.out.println("Average latency in milliseconds: " + totalLatency / (float) Tracker.getValues().size());
+        System.out.println(Tracker.getValues());
+    }
 }

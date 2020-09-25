@@ -50,19 +50,12 @@ public class Producer {
         producer.close();
     }
 
-    public void sendToPartitionSyncAndCollectData() throws InterruptedException {
+    public void sendToPartitionSyncWithPrompt() throws InterruptedException {
         long startSend = System.currentTimeMillis();
-        TimeUnit.SECONDS.sleep(5);
         this.sendToPartitionSync();
         long endSend = System.currentTimeMillis();
         long totalSendTime = endSend - startSend;
         TimeUnit.SECONDS.sleep(5);
-        System.out.println("Total send time  in milliseconds: " + totalSendTime);
-        System.out.println("Number of events: " + Tracker.getValues().size());
-        long totalLatency = Tracker.getValues().stream().reduce(0L, Long::sum);
-        System.out.println("Total latency in milliseconds: " + totalLatency);
-        System.out.println("Average latency in milliseconds: " + totalLatency / Tracker.getValues().size());
-        System.out.println("Total send time - total latency  in milliseconds: " + (totalSendTime - totalLatency));
-        System.out.println(Tracker.getValues());
+        System.out.println("Total send time in milliseconds: " + totalSendTime);
     }
 }

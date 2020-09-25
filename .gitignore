@@ -1,4 +1,5 @@
 /.idea/
 /eventhubs-latency.iml
 /BareSDK/BareSDK.iml
-/BareSDK/src/main/resources
+/BareSDK/src/main/resources/application.properties
+/BareSDK/src/main/resources/my.azureauth
