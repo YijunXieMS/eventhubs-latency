@@ -3,3 +3,4 @@
 /BareSDK/BareSDK.iml
 /BareSDK/src/main/resources/application.properties
 /BareSDK/src/main/resources/my.azureauth
+/BareSDK/target
