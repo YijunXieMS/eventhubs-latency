@@ -44,5 +44,5 @@ to see the test result.
 ```shell script
 mvn compile exec:java -Dexec.mainClass="eventhubs.latency.bare.app.ProducerApplication"
 ```
-## Observation
-EventProcessorClient adds about 30% overhead.
+## Test Result
+Refer to [TestResult.md](TestResult.md)
